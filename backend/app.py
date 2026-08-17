@@ -1,4 +1,7 @@
-from flask import Flask, jsonify, request
+import os
+from pathlib import Path
+
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 from analyzers.basic_analyzer import compare_skills
@@ -9,13 +12,42 @@ from analyzers.openai_analyzer import analyze_with_openai
 
 
 # =========================================================
+# PATH CONFIGURATION
+# =========================================================
+
+BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIR = BASE_DIR.parent / "frontend"
+
+
+# =========================================================
 # FLASK APPLICATION
 # =========================================================
 
 app = Flask(__name__)
 
-# Allow frontend to communicate with backend
 CORS(app)
+
+
+# =========================================================
+# FRONTEND
+# =========================================================
+
+@app.route("/", methods=["GET"])
+def serve_index():
+
+    return send_from_directory(
+        FRONTEND_DIR,
+        "index.html"
+    )
+
+
+@app.route("/<path:filename>", methods=["GET"])
+def serve_frontend_file(filename):
+
+    return send_from_directory(
+        FRONTEND_DIR,
+        filename
+    )
 
 
 # =========================================================
@@ -27,7 +59,7 @@ def health_check():
 
     return jsonify({
         "status": "success",
-        "message": "Resume Score Checker backend is running"
+        "message": "FyndHR backend is running"
     })
 
 
@@ -53,13 +85,18 @@ def analyze_resume():
 
 
     # -----------------------------------------------------
-    # GET JOB DESCRIPTION AND RESUME
+    # GET JOB DESCRIPTION
     # -----------------------------------------------------
 
     job_description = data.get(
         "job_description",
         ""
     ).strip()
+
+
+    # -----------------------------------------------------
+    # GET RESUME
+    # -----------------------------------------------------
 
     resume = data.get(
         "resume",
@@ -122,25 +159,6 @@ def analyze_resume():
         # =================================================
         # 4. OPENAI INTELLIGENCE ANALYSIS
         # =================================================
-        #
-        # OpenAI is currently used as an intelligence layer.
-        #
-        # It can identify:
-        # - Skills not present in our dictionary
-        # - Synonyms
-        # - Equivalent technologies
-        # - Related technologies
-        # - Skill importance
-        # - Resume evidence
-        # - Contextual matches
-        #
-        # IMPORTANT:
-        # AI results are NOT used to calculate the ATS
-        # score yet.
-        #
-        # We will first test the AI results against different
-        # job descriptions and resumes.
-        #
 
         ai_analysis = analyze_with_openai(
             job_description,
@@ -149,20 +167,8 @@ def analyze_resume():
 
 
         # =================================================
-        # 5. EXISTING ATS SCORE
+        # 5. ATS SCORE
         # =================================================
-        #
-        # The existing deterministic scoring engine remains
-        # unchanged at this stage.
-        #
-        # This allows us to compare:
-        #
-        # Deterministic analysis
-        #          VS
-        # OpenAI intelligence
-        #
-        # before changing the scoring system.
-        #
 
         ats_score = calculate_ats_score(
             skill_analysis,
@@ -195,7 +201,7 @@ def analyze_resume():
 
 
                 # -----------------------------------------
-                # DETERMINISTIC SKILLS
+                # SKILLS
                 # -----------------------------------------
 
                 "skills":
@@ -219,7 +225,7 @@ def analyze_resume():
 
 
                 # -----------------------------------------
-                # CURRENT ATS SCORE
+                # ATS SCORE
                 # -----------------------------------------
 
                 "score":
@@ -227,7 +233,7 @@ def analyze_resume():
 
 
                 # -----------------------------------------
-                # OPENAI INTELLIGENCE
+                # AI ANALYSIS
                 # -----------------------------------------
 
                 "ai_analysis":
@@ -240,16 +246,11 @@ def analyze_resume():
 
     except Exception as error:
 
-        # -------------------------------------------------
-        # LOG ERROR IN TERMINAL
-        # -------------------------------------------------
+        print(
+            "Analysis error:",
+            error
+        )
 
-        print("Analysis error:", error)
-
-
-        # -------------------------------------------------
-        # RETURN ERROR TO FRONTEND
-        # -------------------------------------------------
 
         return jsonify({
 
@@ -270,8 +271,15 @@ def analyze_resume():
 
 if __name__ == "__main__":
 
+    port = int(
+        os.environ.get(
+            "PORT",
+            5000
+        )
+    )
+
     app.run(
-        host="127.0.0.1",
-        port=5000,
-        debug=True
+        host="0.0.0.0",
+        port=port,
+        debug=False
     )
