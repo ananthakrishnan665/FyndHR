@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="FyndHR - Evidence-based resume and job description analysis."
+    >
+
+    <meta
+        name="application-name"
+        content="FyndHR"
+    >
+
+    <title>FyndHR — Resume & Job Match Analyzer</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+            Fynd<span>HR</span>
+        </div>
+
+        <div class="header-subtitle">
+            Evidence-based resume analysis
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="hero">
+
+            <h1>
+                Resume & Job Match Analyzer
+            </h1>
+
+            <p>
+                Compare your resume with a job description
+                and discover where your experience matches,
+                which requirements may be missing, and where
+                your resume can be improved.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             INPUT SECTION
+             ================================================= -->
+
+        <section class="input-grid">
+
+
+            <!-- =============================================
+                 JOB DESCRIPTION
+                 ============================================= -->
+
+            <div class="input-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Job Description
+                        </h2>
+
+                        <p>
+                            Paste the complete job description
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="counter"
+                        id="jdCounter"
+                    >
+                        0 characters
+                    </span>
+
+                </div>
+
+
+                <textarea
+                    id="jobDescription"
+                    placeholder="Paste the job description here...
+
+Example:
+
+We are looking for a Data Analyst with experience in SQL, Python, Excel and Power BI..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- =============================================
+                 RESUME
+                 ============================================= -->
+
+            <div class="input-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Your Resume
+                        </h2>
+
+                        <p>
+                            Paste your resume text
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="counter"
+                        id="resumeCounter"
+                    >
+                        0 characters
+                    </span>
+
+                </div>
+
+
+                <textarea
+                    id="resume"
+                    placeholder="Paste your complete resume here...
+
+Include your experience, skills, education, projects and certifications."
+                ></textarea>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACTION
+             ================================================= -->
+
+        <section class="action-section">
+
+            <button
+                id="analyzeButton"
+                class="analyze-button"
+            >
+                Analyze Resume
+            </button>
+
+
+            <p class="privacy-note">
+                Your analysis is generated from the information
+                you provide.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             RESULTS
+             ================================================= -->
+
+        <section
+            id="results"
+            class="results hidden"
+        >
+
+            <h2>
+                Analysis Results
+            </h2>
+
+
+            <div class="score-placeholder">
+
+                Results will appear here.
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        FyndHR — Resume & Job Match Analyzer
+
+    </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="script.js?v=4"></script>
+
+
+</body>
+
+</html>
